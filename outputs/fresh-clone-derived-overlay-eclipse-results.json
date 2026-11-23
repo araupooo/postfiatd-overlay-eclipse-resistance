@@ -1,0 +1,956 @@
+{
+ "constants": {
+  "bootcache_prune_percent": 10,
+  "bootcache_size": 1000,
+  "clock_tolerance_s": 20,
+  "connect_timeout_s": 15,
+  "endpoints_max": 64,
+  "endpoints_per_broadcast": 12,
+  "in_peers": 11,
+  "ip_limit": 2,
+  "livecache_ttl_s": 30,
+  "max_connect_attempts": 20,
+  "max_diverged_time_s": 300,
+  "max_hops": 6,
+  "max_peers": 21,
+  "max_redirects": 30,
+  "max_unknown_time_s": 600,
+  "min_out_count": 10,
+  "out_peers": 10,
+  "out_percent": 15,
+  "overlay_timer_s": 1,
+  "peer_timer_interval_s": 60,
+  "redirect_endpoints": 10,
+  "seconds_per_message": 151,
+  "sendq_drop": 192,
+  "sendq_intervals": 4,
+  "sendq_target": 128
+ },
+ "limits_table": [
+  {
+   "item": "max peers",
+   "unit": "peers",
+   "value": 21
+  },
+  {
+   "item": "outbound peers",
+   "unit": "peers",
+   "value": 10
+  },
+  {
+   "item": "inbound peers",
+   "unit": "peers",
+   "value": 11
+  },
+  {
+   "item": "outbound share",
+   "unit": "percent",
+   "value": 15
+  },
+  {
+   "item": "minimum outbound peers",
+   "unit": "peers",
+   "value": 10
+  },
+  {
+   "item": "per-IP inbound limit",
+   "unit": "connections per IP",
+   "value": 2
+  },
+  {
+   "item": "per-IP outbound limit",
+   "unit": "none: no cap in code",
+   "value": null
+  },
+  {
+   "item": "simultaneous connect attempts",
+   "unit": "attempts",
+   "value": 20
+  },
+  {
+   "item": "connect attempt timeout",
+   "unit": "s",
+   "value": 15
+  },
+  {
+   "item": "overlay timer tick",
+   "unit": "s",
+   "value": 1
+  },
+  {
+   "item": "peer ping interval",
+   "unit": "s",
+   "value": 60
+  },
+  {
+   "item": "clock tolerance",
+   "unit": "s",
+   "value": 20
+  },
+  {
+   "item": "bootcache size",
+   "unit": "entries",
+   "value": 1000
+  },
+  {
+   "item": "bootcache prune",
+   "unit": "percent",
+   "value": 10
+  },
+  {
+   "item": "livecache time to live",
+   "unit": "s",
+   "value": 30
+  },
+  {
+   "item": "endpoint max hops",
+   "unit": "hops",
+   "value": 6
+  },
+  {
+   "item": "endpoints per broadcast",
+   "unit": "endpoints",
+   "value": 12
+  },
+  {
+   "item": "endpoints accepted per message",
+   "unit": "endpoints",
+   "value": 64
+  },
+  {
+   "item": "redirect endpoints",
+   "unit": "endpoints",
+   "value": 10
+  },
+  {
+   "item": "redirect IPs into bootcache",
+   "unit": "addresses",
+   "value": 30
+  },
+  {
+   "item": "endpoint broadcast cadence",
+   "unit": "s",
+   "value": 151
+  },
+  {
+   "item": "diverged eviction",
+   "unit": "s",
+   "value": 300
+  },
+  {
+   "item": "unknown eviction",
+   "unit": "s",
+   "value": 600
+  },
+  {
+   "item": "send queue drop threshold",
+   "unit": "messages",
+   "value": 192
+  },
+  {
+   "item": "send queue target",
+   "unit": "messages",
+   "value": 128
+  },
+  {
+   "item": "send queue eviction intervals",
+   "unit": "intervals",
+   "value": 4
+  }
+ ],
+ "pack": "Overlay and Eclipse-Resistance in postfiatd",
+ "pinned_commit": "0085a1ff885d6a446369cf73a4430f75af22be55",
+ "scenarios": [
+  {
+   "id": "S-01",
+   "runs": [
+    {
+     "attacker_inbound": 2,
+     "attacker_outbound": 10,
+     "events": [
+      {
+       "round": 0,
+       "text": "attacker offers 10 endpoints from 1 IP on 10 ports; outbound slots have no per-IP cap"
+      },
+      {
+       "round": 1,
+       "text": "all 10 outbound slots taken by the attacker; 9 honest inbound links remain"
+      }
+     ],
+     "honest_inbound": 9,
+     "honest_links": 0,
+     "honest_outbound": 0,
+     "label": "A",
+     "outcome": "eclipsed",
+     "params": {
+      "attacker_first": true,
+      "attacker_ips": 1,
+      "attacker_ports": 10,
+      "fixed": 0,
+      "handshake_reject": false,
+      "honest_inbound_pool": 50,
+      "honest_pool": 50,
+      "rejoin": false,
+      "reserved": 0
+     },
+     "reason": "no_honest_outbound_link_attacker_controls_outbound_view",
+     "rounds": 1,
+     "title": "Sybil flood, 1 IP x 10 ports, no fixed peers"
+    },
+    {
+     "attacker_inbound": 2,
+     "attacker_outbound": 10,
+     "events": [
+      {
+       "round": 0,
+       "text": "attacker offers 10 endpoints from 1 IP on 10 ports"
+      },
+      {
+       "round": 1,
+       "text": "fixed honest peer is tried first and holds one honest link; outbound slots otherwise attacker-held"
+      }
+     ],
+     "honest_inbound": 9,
+     "honest_links": 1,
+     "honest_outbound": 0,
+     "label": "B",
+     "outcome": "degraded",
+     "params": {
+      "attacker_first": true,
+      "attacker_ips": 1,
+      "attacker_ports": 10,
+      "fixed": 1,
+      "handshake_reject": false,
+      "honest_inbound_pool": 50,
+      "honest_pool": 50,
+      "rejoin": false,
+      "reserved": 0
+     },
+     "reason": "honest_links_below_half_outbound_target",
+     "rounds": 1,
+     "title": "Sybil flood, 1 IP x 10 ports, 1 fixed honest peer"
+    }
+   ],
+   "title": "Sybil flood from a single IP"
+  },
+  {
+   "id": "S-02",
+   "runs": [
+    {
+     "attacker_inbound": 10,
+     "attacker_outbound": 10,
+     "events": [
+      {
+       "round": 0,
+       "text": "attacker offers 50 endpoints from 5 IPs on 10 ports each"
+      },
+      {
+       "round": 1,
+       "text": "all 10 outbound slots taken by the attacker; honest inbound links remain"
+      }
+     ],
+     "honest_inbound": 1,
+     "honest_links": 0,
+     "honest_outbound": 0,
+     "label": "A",
+     "outcome": "eclipsed",
+     "params": {
+      "attacker_first": true,
+      "attacker_ips": 5,
+      "attacker_ports": 10,
+      "fixed": 0,
+      "handshake_reject": false,
+      "honest_inbound_pool": 50,
+      "honest_pool": 50,
+      "rejoin": false,
+      "reserved": 0
+     },
+     "reason": "no_honest_outbound_link_attacker_controls_outbound_view",
+     "rounds": 1,
+     "title": "Sybil flood, 5 IPs x 10 ports, no fixed peers"
+    },
+    {
+     "attacker_inbound": 10,
+     "attacker_outbound": 10,
+     "events": [
+      {
+       "round": 0,
+       "text": "attacker offers 50 endpoints from 5 IPs on 10 ports each"
+      },
+      {
+       "round": 1,
+       "text": "fixed honest peer is tried first and holds one honest link"
+      }
+     ],
+     "honest_inbound": 1,
+     "honest_links": 1,
+     "honest_outbound": 0,
+     "label": "B",
+     "outcome": "degraded",
+     "params": {
+      "attacker_first": true,
+      "attacker_ips": 5,
+      "attacker_ports": 10,
+      "fixed": 1,
+      "handshake_reject": false,
+      "honest_inbound_pool": 50,
+      "honest_pool": 50,
+      "rejoin": false,
+      "reserved": 0
+     },
+     "reason": "honest_links_below_half_outbound_target",
+     "rounds": 1,
+     "title": "Sybil flood, 5 IPs x 10 ports, 1 fixed honest peer"
+    }
+   ],
+   "title": "Sybil flood from five IPs"
+  },
+  {
+   "id": "S-03",
+   "runs": [
+    {
+     "attacker_inbound": 11,
+     "attacker_outbound": 10,
+     "events": [
+      {
+       "round": 0,
+       "text": "attacker fills outbound with 10 ports on 1 IP and inbound with 11 IPs at 2 per IP"
+      },
+      {
+       "round": 1,
+       "text": "no honest outbound, no honest inbound, no anchor: victim isolated"
+      }
+     ],
+     "honest_inbound": 0,
+     "honest_links": 0,
+     "honest_outbound": 0,
+     "label": "A",
+     "outcome": "eclipsed",
+     "params": {
+      "attacker_first": true,
+      "attacker_ips": 11,
+      "attacker_ports": 10,
+      "fixed": 0,
+      "handshake_reject": false,
+      "honest_inbound_pool": 50,
+      "honest_pool": 50,
+      "rejoin": false,
+      "reserved": 0
+     },
+     "reason": "no_honest_outbound_link_attacker_controls_outbound_view",
+     "rounds": 1,
+     "title": "Targeted eclipse, no fixed peers"
+    },
+    {
+     "attacker_inbound": 11,
+     "attacker_outbound": 10,
+     "events": [
+      {
+       "round": 0,
+       "text": "attacker fills outbound and inbound as in run A"
+      },
+      {
+       "round": 1,
+       "text": "fixed honest peer is tried first and holds one honest link"
+      }
+     ],
+     "honest_inbound": 0,
+     "honest_links": 1,
+     "honest_outbound": 0,
+     "label": "B",
+     "outcome": "degraded",
+     "params": {
+      "attacker_first": true,
+      "attacker_ips": 11,
+      "attacker_ports": 10,
+      "fixed": 1,
+      "handshake_reject": false,
+      "honest_inbound_pool": 50,
+      "honest_pool": 50,
+      "rejoin": false,
+      "reserved": 0
+     },
+     "reason": "honest_links_below_half_outbound_target",
+     "rounds": 1,
+     "title": "Targeted eclipse, 1 fixed honest peer"
+    }
+   ],
+   "title": "Targeted eclipse of an isolated victim"
+  },
+  {
+   "id": "S-04",
+   "runs": [
+    {
+     "attacker_inbound": 11,
+     "attacker_outbound": 10,
+     "events": [
+      {
+       "round": 0,
+       "text": "attacker fills outbound and inbound as in S-03 run A"
+      },
+      {
+       "round": 1,
+       "text": "two fixed honest peers are tried first and hold two honest links"
+      }
+     ],
+     "honest_inbound": 0,
+     "honest_links": 2,
+     "honest_outbound": 0,
+     "label": "A",
+     "outcome": "degraded",
+     "params": {
+      "attacker_first": true,
+      "attacker_ips": 11,
+      "attacker_ports": 10,
+      "fixed": 2,
+      "handshake_reject": false,
+      "honest_inbound_pool": 50,
+      "honest_pool": 50,
+      "rejoin": false,
+      "reserved": 0
+     },
+     "reason": "honest_links_below_half_outbound_target",
+     "rounds": 1,
+     "title": "Targeted eclipse, 2 fixed honest peers"
+    }
+   ],
+   "title": "Targeted eclipse with two fixed peers"
+  },
+  {
+   "id": "S-05",
+   "runs": [
+    {
+     "attacker_inbound": 10,
+     "attacker_outbound": 10,
+     "events": [
+      {
+       "round": 0,
+       "text": "5-IP Sybil flood; 3 honest peers hold reservations and bypass the caps"
+      },
+      {
+       "round": 1,
+       "text": "three reserved honest links hold; outbound slots otherwise attacker-held"
+      }
+     ],
+     "honest_inbound": 1,
+     "honest_links": 3,
+     "honest_outbound": 0,
+     "label": "A",
+     "outcome": "degraded",
+     "params": {
+      "attacker_first": true,
+      "attacker_ips": 5,
+      "attacker_ports": 10,
+      "fixed": 0,
+      "handshake_reject": false,
+      "honest_inbound_pool": 50,
+      "honest_pool": 50,
+      "rejoin": false,
+      "reserved": 3
+     },
+     "reason": "honest_links_below_half_outbound_target",
+     "rounds": 1,
+     "title": "5-IP flood, 3 reserved honest peers"
+    },
+    {
+     "attacker_inbound": 10,
+     "attacker_outbound": 10,
+     "events": [
+      {
+       "round": 0,
+       "text": "5-IP Sybil flood; 6 honest peers hold reservations and bypass the caps"
+      },
+      {
+       "round": 1,
+       "text": "six reserved honest links hold: at least half the outbound target is honest"
+      }
+     ],
+     "honest_inbound": 1,
+     "honest_links": 6,
+     "honest_outbound": 0,
+     "label": "B",
+     "outcome": "connected",
+     "params": {
+      "attacker_first": true,
+      "attacker_ips": 5,
+      "attacker_ports": 10,
+      "fixed": 0,
+      "handshake_reject": false,
+      "honest_inbound_pool": 50,
+      "honest_pool": 50,
+      "rejoin": false,
+      "reserved": 6
+     },
+     "reason": "honest_links_at_least_half_outbound_target",
+     "rounds": 1,
+     "title": "5-IP flood, 6 reserved honest peers"
+    }
+   ],
+   "title": "Reserved honest peers under Sybil flood"
+  },
+  {
+   "id": "S-06",
+   "runs": [
+    {
+     "attacker_inbound": 0,
+     "attacker_outbound": 0,
+     "events": [
+      {
+       "round": 0,
+       "text": "no attacker; honest pool of 50 offers ample endpoints"
+      },
+      {
+       "round": 1,
+       "text": "all 10 outbound slots filled with honest peers"
+      }
+     ],
+     "honest_inbound": 11,
+     "honest_links": 10,
+     "honest_outbound": 10,
+     "label": "A",
+     "outcome": "connected",
+     "params": {
+      "attacker_first": false,
+      "attacker_ips": 0,
+      "attacker_ports": 0,
+      "fixed": 0,
+      "handshake_reject": false,
+      "honest_inbound_pool": 50,
+      "honest_pool": 50,
+      "rejoin": false,
+      "reserved": 0
+     },
+     "reason": "honest_links_at_least_half_outbound_target",
+     "rounds": 1,
+     "title": "Healthy network, large honest pool"
+    }
+   ],
+   "title": "Healthy network, no attacker"
+  },
+  {
+   "id": "S-07",
+   "runs": [
+    {
+     "attacker_inbound": 0,
+     "attacker_outbound": 0,
+     "events": [
+      {
+       "round": 0,
+       "text": "no attacker; honest pool of 8 offers fewer endpoints than slots"
+      },
+      {
+       "round": 1,
+       "text": "8 of 10 outbound slots filled with honest peers; 2 slots stay open"
+      }
+     ],
+     "honest_inbound": 8,
+     "honest_links": 8,
+     "honest_outbound": 8,
+     "label": "A",
+     "outcome": "connected",
+     "params": {
+      "attacker_first": false,
+      "attacker_ips": 0,
+      "attacker_ports": 0,
+      "fixed": 0,
+      "handshake_reject": false,
+      "honest_inbound_pool": 8,
+      "honest_pool": 8,
+      "rejoin": false,
+      "reserved": 0
+     },
+     "reason": "honest_links_at_least_half_outbound_target",
+     "rounds": 1,
+     "title": "Healthy network, small honest pool"
+    }
+   ],
+   "title": "Healthy network, small honest pool"
+  },
+  {
+   "id": "S-08",
+   "runs": [
+    {
+     "attacker_inbound": 0,
+     "attacker_outbound": 0,
+     "events": [
+      {
+       "round": 0,
+       "text": "half of the 50 honest peers leave at once"
+      },
+      {
+       "round": 1,
+       "text": "25 honest peers remain; all 10 outbound slots refill with honest peers"
+      }
+     ],
+     "honest_inbound": 11,
+     "honest_links": 10,
+     "honest_outbound": 10,
+     "label": "A",
+     "outcome": "connected",
+     "params": {
+      "attacker_first": false,
+      "attacker_ips": 0,
+      "attacker_ports": 0,
+      "fixed": 0,
+      "handshake_reject": false,
+      "honest_inbound_pool": 25,
+      "honest_pool": 25,
+      "rejoin": false,
+      "reserved": 0
+     },
+     "reason": "honest_links_at_least_half_outbound_target",
+     "rounds": 1,
+     "title": "Churn, half the honest peers leave"
+    }
+   ],
+   "title": "Churn, half the honest peers leave"
+  },
+  {
+   "id": "S-09",
+   "runs": [
+    {
+     "attacker_inbound": 0,
+     "attacker_outbound": 0,
+     "events": [
+      {
+       "round": 0,
+       "text": "all honest peers leave at once: no honest endpoint in any cache"
+      },
+      {
+       "round": 1,
+       "text": "victim isolated; bootcache holds only stale entries"
+      },
+      {
+       "round": 2,
+       "text": "honest peers return; autoconnect refills 10 outbound slots in a second round"
+      },
+      {
+       "round": 2,
+       "text": "rejoin complete after 2 rounds; worst phase was partitioned"
+      }
+     ],
+     "honest_inbound": 0,
+     "honest_links": 0,
+     "honest_outbound": 0,
+     "label": "A",
+     "outcome": "partitioned",
+     "params": {
+      "attacker_first": false,
+      "attacker_ips": 0,
+      "attacker_ports": 0,
+      "fixed": 0,
+      "handshake_reject": false,
+      "honest_inbound_pool": 0,
+      "honest_pool": 0,
+      "rejoin": true,
+      "reserved": 0
+     },
+     "reason": "no_peer_connections_at_all",
+     "rounds": 2,
+     "title": "Churn, all honest peers leave then return"
+    }
+   ],
+   "title": "Churn, total honest loss and return"
+  },
+  {
+   "id": "S-10",
+   "runs": [
+    {
+     "attacker_inbound": 0,
+     "attacker_outbound": 0,
+     "events": [
+      {
+       "round": 0,
+       "text": "network splits for 10 rounds; victim cut off from all honest peers"
+      },
+      {
+       "round": 1,
+       "text": "victim isolated for the whole split"
+      },
+      {
+       "round": 2,
+       "text": "split heals; autoconnect refills 10 outbound slots in a second round"
+      },
+      {
+       "round": 2,
+       "text": "rejoin complete after 2 rounds; worst phase was partitioned"
+      }
+     ],
+     "honest_inbound": 0,
+     "honest_links": 0,
+     "honest_outbound": 0,
+     "label": "A",
+     "outcome": "partitioned",
+     "params": {
+      "attacker_first": false,
+      "attacker_ips": 0,
+      "attacker_ports": 0,
+      "fixed": 0,
+      "handshake_reject": false,
+      "honest_inbound_pool": 0,
+      "honest_pool": 0,
+      "rejoin": true,
+      "reserved": 0
+     },
+     "reason": "no_peer_connections_at_all",
+     "rounds": 2,
+     "title": "Partition for 10 rounds, then rejoin"
+    }
+   ],
+   "title": "Partition and rejoin, no anchor"
+  },
+  {
+   "id": "S-11",
+   "runs": [
+    {
+     "attacker_inbound": 0,
+     "attacker_outbound": 0,
+     "events": [
+      {
+       "round": 0,
+       "text": "network splits for 10 rounds; 1 fixed honest peer sits across the split"
+      },
+      {
+       "round": 1,
+       "text": "fixed peer holds one honest link through the split"
+      },
+      {
+       "round": 2,
+       "text": "split heals; autoconnect refills 10 outbound slots in a second round"
+      },
+      {
+       "round": 2,
+       "text": "rejoin complete after 2 rounds; worst phase was degraded"
+      }
+     ],
+     "honest_inbound": 0,
+     "honest_links": 1,
+     "honest_outbound": 0,
+     "label": "A",
+     "outcome": "degraded",
+     "params": {
+      "attacker_first": false,
+      "attacker_ips": 0,
+      "attacker_ports": 0,
+      "fixed": 1,
+      "handshake_reject": false,
+      "honest_inbound_pool": 0,
+      "honest_pool": 0,
+      "rejoin": true,
+      "reserved": 0
+     },
+     "reason": "honest_links_below_half_outbound_target",
+     "rounds": 2,
+     "title": "Partition for 10 rounds, 1 fixed peer across the split"
+    }
+   ],
+   "title": "Partition and rejoin with a fixed anchor"
+  },
+  {
+   "id": "S-12",
+   "runs": [
+    {
+     "attacker_inbound": 2,
+     "attacker_outbound": 10,
+     "events": [
+      {
+       "round": 0,
+       "text": "fresh node, empty bootcache; a full peer redirects 10 attacker endpoints"
+      },
+      {
+       "round": 1,
+       "text": "attacker endpoints are the only ones known; all 10 outbound slots taken"
+      }
+     ],
+     "honest_inbound": 0,
+     "honest_links": 0,
+     "honest_outbound": 0,
+     "label": "A",
+     "outcome": "eclipsed",
+     "params": {
+      "attacker_first": true,
+      "attacker_ips": 1,
+      "attacker_ports": 10,
+      "fixed": 0,
+      "handshake_reject": false,
+      "honest_inbound_pool": 0,
+      "honest_pool": 0,
+      "rejoin": false,
+      "reserved": 0
+     },
+     "reason": "no_honest_outbound_link_attacker_controls_outbound_view",
+     "rounds": 1,
+     "title": "Redirect poisoning, fresh node"
+    },
+    {
+     "attacker_inbound": 2,
+     "attacker_outbound": 0,
+     "events": [
+      {
+       "round": 0,
+       "text": "mature node; honest bootcache entries carry high valence"
+      },
+      {
+       "round": 1,
+       "text": "honest endpoints are tried first; attacker redirects stay untried"
+      },
+      {
+       "round": 0,
+       "text": "honest bootcache entries outrank attacker endpoints: attacker outbound attempts stay untried"
+      }
+     ],
+     "honest_inbound": 9,
+     "honest_links": 10,
+     "honest_outbound": 10,
+     "label": "B",
+     "outcome": "connected",
+     "params": {
+      "attacker_first": false,
+      "attacker_ips": 1,
+      "attacker_ports": 10,
+      "fixed": 0,
+      "handshake_reject": false,
+      "honest_inbound_pool": 50,
+      "honest_pool": 50,
+      "rejoin": false,
+      "reserved": 0
+     },
+     "reason": "honest_links_at_least_half_outbound_target",
+     "rounds": 1,
+     "title": "Redirect poisoning, mature node"
+    }
+   ],
+   "title": "Redirect poisoning via a full peer"
+  },
+  {
+   "id": "S-13",
+   "runs": [
+    {
+     "attacker_inbound": 0,
+     "attacker_outbound": 0,
+     "events": [
+      {
+       "round": 0,
+       "text": "attacker offers 10 endpoints with bad session signatures, wrong network id, and skewed clocks"
+      },
+      {
+       "round": 1,
+       "text": "every attacker handshake is rejected; honest slots are preserved"
+      },
+      {
+       "round": 0,
+       "text": "every attacker handshake rejected (bad signature / wrong network / clock skew): attacker takes no slot"
+      }
+     ],
+     "honest_inbound": 11,
+     "honest_links": 10,
+     "honest_outbound": 10,
+     "label": "A",
+     "outcome": "connected",
+     "params": {
+      "attacker_first": true,
+      "attacker_ips": 10,
+      "attacker_ports": 1,
+      "fixed": 0,
+      "handshake_reject": true,
+      "honest_inbound_pool": 50,
+      "honest_pool": 50,
+      "rejoin": false,
+      "reserved": 0
+     },
+     "reason": "honest_links_at_least_half_outbound_target",
+     "rounds": 1,
+     "title": "Handshake rejection of a Sybil flood"
+    }
+   ],
+   "title": "Handshake rejection under attack"
+  }
+ ],
+ "threshold_table": [
+  {
+   "attacker_endpoints": 1,
+   "attacker_inbound": 2,
+   "attacker_ips": 1,
+   "attacker_outbound": 1,
+   "attacker_ports": 1,
+   "honest_inbound": 9,
+   "honest_links": 9,
+   "honest_outbound": 9,
+   "outcome": "connected"
+  },
+  {
+   "attacker_endpoints": 5,
+   "attacker_inbound": 2,
+   "attacker_ips": 1,
+   "attacker_outbound": 5,
+   "attacker_ports": 5,
+   "honest_inbound": 9,
+   "honest_links": 5,
+   "honest_outbound": 5,
+   "outcome": "connected"
+  },
+  {
+   "attacker_endpoints": 10,
+   "attacker_inbound": 2,
+   "attacker_ips": 1,
+   "attacker_outbound": 10,
+   "attacker_ports": 10,
+   "honest_inbound": 9,
+   "honest_links": 0,
+   "honest_outbound": 0,
+   "outcome": "eclipsed"
+  },
+  {
+   "attacker_endpoints": 20,
+   "attacker_inbound": 4,
+   "attacker_ips": 2,
+   "attacker_outbound": 10,
+   "attacker_ports": 10,
+   "honest_inbound": 7,
+   "honest_links": 0,
+   "honest_outbound": 0,
+   "outcome": "eclipsed"
+  },
+  {
+   "attacker_endpoints": 10,
+   "attacker_inbound": 10,
+   "attacker_ips": 5,
+   "attacker_outbound": 10,
+   "attacker_ports": 2,
+   "honest_inbound": 1,
+   "honest_links": 0,
+   "honest_outbound": 0,
+   "outcome": "eclipsed"
+  },
+  {
+   "attacker_endpoints": 50,
+   "attacker_inbound": 10,
+   "attacker_ips": 5,
+   "attacker_outbound": 10,
+   "attacker_ports": 10,
+   "honest_inbound": 1,
+   "honest_links": 0,
+   "honest_outbound": 0,
+   "outcome": "eclipsed"
+  },
+  {
+   "attacker_endpoints": 11,
+   "attacker_inbound": 11,
+   "attacker_ips": 11,
+   "attacker_outbound": 10,
+   "attacker_ports": 1,
+   "honest_inbound": 0,
+   "honest_links": 0,
+   "honest_outbound": 0,
+   "outcome": "eclipsed"
+  }
+ ],
+ "totals": {
+  "connected": 6,
+  "degraded": 6,
+  "eclipsed": 4,
+  "partitioned": 2,
+  "runs": 18,
+  "scenarios": 13
+ }
+}
