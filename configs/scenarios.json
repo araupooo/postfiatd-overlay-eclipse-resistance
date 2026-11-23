@@ -1,0 +1,573 @@
+{
+ "constants": {
+  "bootcache_prune_percent": 10,
+  "bootcache_size": 1000,
+  "clock_tolerance_s": 20,
+  "connect_timeout_s": 15,
+  "endpoints_max": 64,
+  "endpoints_per_broadcast": 12,
+  "in_peers": 11,
+  "ip_limit": 2,
+  "livecache_ttl_s": 30,
+  "max_connect_attempts": 20,
+  "max_diverged_time_s": 300,
+  "max_hops": 6,
+  "max_peers": 21,
+  "max_redirects": 30,
+  "max_unknown_time_s": 600,
+  "min_out_count": 10,
+  "out_peers": 10,
+  "out_percent": 15,
+  "peer_timer_interval_s": 60,
+  "redirect_endpoints": 10,
+  "seconds_per_message": 151,
+  "sendq_drop": 192,
+  "sendq_intervals": 4,
+  "sendq_target": 128,
+  "overlay_timer_s": 1
+ },
+ "pinned_commit": "0085a1ff885d6a446369cf73a4430f75af22be55",
+ "scenarios": [
+  {
+   "id": "S-01",
+   "runs": [
+    {
+     "events": [
+      {
+       "round": 0,
+       "text": "attacker offers 10 endpoints from 1 IP on 10 ports; outbound slots have no per-IP cap"
+      },
+      {
+       "round": 1,
+       "text": "all 10 outbound slots taken by the attacker; 9 honest inbound links remain"
+      }
+     ],
+     "label": "A",
+     "params": {
+      "attacker_first": true,
+      "attacker_ips": 1,
+      "attacker_ports": 10,
+      "fixed": 0,
+      "handshake_reject": false,
+      "honest_inbound_pool": 50,
+      "honest_pool": 50,
+      "rejoin": false,
+      "reserved": 0
+     },
+     "title": "Sybil flood, 1 IP x 10 ports, no fixed peers"
+    },
+    {
+     "events": [
+      {
+       "round": 0,
+       "text": "attacker offers 10 endpoints from 1 IP on 10 ports"
+      },
+      {
+       "round": 1,
+       "text": "fixed honest peer is tried first and holds one honest link; outbound slots otherwise attacker-held"
+      }
+     ],
+     "label": "B",
+     "params": {
+      "attacker_first": true,
+      "attacker_ips": 1,
+      "attacker_ports": 10,
+      "fixed": 1,
+      "handshake_reject": false,
+      "honest_inbound_pool": 50,
+      "honest_pool": 50,
+      "rejoin": false,
+      "reserved": 0
+     },
+     "title": "Sybil flood, 1 IP x 10 ports, 1 fixed honest peer"
+    }
+   ],
+   "title": "Sybil flood from a single IP"
+  },
+  {
+   "id": "S-02",
+   "runs": [
+    {
+     "events": [
+      {
+       "round": 0,
+       "text": "attacker offers 50 endpoints from 5 IPs on 10 ports each"
+      },
+      {
+       "round": 1,
+       "text": "all 10 outbound slots taken by the attacker; honest inbound links remain"
+      }
+     ],
+     "label": "A",
+     "params": {
+      "attacker_first": true,
+      "attacker_ips": 5,
+      "attacker_ports": 10,
+      "fixed": 0,
+      "handshake_reject": false,
+      "honest_inbound_pool": 50,
+      "honest_pool": 50,
+      "rejoin": false,
+      "reserved": 0
+     },
+     "title": "Sybil flood, 5 IPs x 10 ports, no fixed peers"
+    },
+    {
+     "events": [
+      {
+       "round": 0,
+       "text": "attacker offers 50 endpoints from 5 IPs on 10 ports each"
+      },
+      {
+       "round": 1,
+       "text": "fixed honest peer is tried first and holds one honest link"
+      }
+     ],
+     "label": "B",
+     "params": {
+      "attacker_first": true,
+      "attacker_ips": 5,
+      "attacker_ports": 10,
+      "fixed": 1,
+      "handshake_reject": false,
+      "honest_inbound_pool": 50,
+      "honest_pool": 50,
+      "rejoin": false,
+      "reserved": 0
+     },
+     "title": "Sybil flood, 5 IPs x 10 ports, 1 fixed honest peer"
+    }
+   ],
+   "title": "Sybil flood from five IPs"
+  },
+  {
+   "id": "S-03",
+   "runs": [
+    {
+     "events": [
+      {
+       "round": 0,
+       "text": "attacker fills outbound with 10 ports on 1 IP and inbound with 11 IPs at 2 per IP"
+      },
+      {
+       "round": 1,
+       "text": "no honest outbound, no honest inbound, no anchor: victim isolated"
+      }
+     ],
+     "label": "A",
+     "params": {
+      "attacker_first": true,
+      "attacker_ips": 11,
+      "attacker_ports": 10,
+      "fixed": 0,
+      "handshake_reject": false,
+      "honest_inbound_pool": 50,
+      "honest_pool": 50,
+      "rejoin": false,
+      "reserved": 0
+     },
+     "title": "Targeted eclipse, no fixed peers"
+    },
+    {
+     "events": [
+      {
+       "round": 0,
+       "text": "attacker fills outbound and inbound as in run A"
+      },
+      {
+       "round": 1,
+       "text": "fixed honest peer is tried first and holds one honest link"
+      }
+     ],
+     "label": "B",
+     "params": {
+      "attacker_first": true,
+      "attacker_ips": 11,
+      "attacker_ports": 10,
+      "fixed": 1,
+      "handshake_reject": false,
+      "honest_inbound_pool": 50,
+      "honest_pool": 50,
+      "rejoin": false,
+      "reserved": 0
+     },
+     "title": "Targeted eclipse, 1 fixed honest peer"
+    }
+   ],
+   "title": "Targeted eclipse of an isolated victim"
+  },
+  {
+   "id": "S-04",
+   "runs": [
+    {
+     "events": [
+      {
+       "round": 0,
+       "text": "attacker fills outbound and inbound as in S-03 run A"
+      },
+      {
+       "round": 1,
+       "text": "two fixed honest peers are tried first and hold two honest links"
+      }
+     ],
+     "label": "A",
+     "params": {
+      "attacker_first": true,
+      "attacker_ips": 11,
+      "attacker_ports": 10,
+      "fixed": 2,
+      "handshake_reject": false,
+      "honest_inbound_pool": 50,
+      "honest_pool": 50,
+      "rejoin": false,
+      "reserved": 0
+     },
+     "title": "Targeted eclipse, 2 fixed honest peers"
+    }
+   ],
+   "title": "Targeted eclipse with two fixed peers"
+  },
+  {
+   "id": "S-05",
+   "runs": [
+    {
+     "events": [
+      {
+       "round": 0,
+       "text": "5-IP Sybil flood; 3 honest peers hold reservations and bypass the caps"
+      },
+      {
+       "round": 1,
+       "text": "three reserved honest links hold; outbound slots otherwise attacker-held"
+      }
+     ],
+     "label": "A",
+     "params": {
+      "attacker_first": true,
+      "attacker_ips": 5,
+      "attacker_ports": 10,
+      "fixed": 0,
+      "handshake_reject": false,
+      "honest_inbound_pool": 50,
+      "honest_pool": 50,
+      "rejoin": false,
+      "reserved": 3
+     },
+     "title": "5-IP flood, 3 reserved honest peers"
+    },
+    {
+     "events": [
+      {
+       "round": 0,
+       "text": "5-IP Sybil flood; 6 honest peers hold reservations and bypass the caps"
+      },
+      {
+       "round": 1,
+       "text": "six reserved honest links hold: at least half the outbound target is honest"
+      }
+     ],
+     "label": "B",
+     "params": {
+      "attacker_first": true,
+      "attacker_ips": 5,
+      "attacker_ports": 10,
+      "fixed": 0,
+      "handshake_reject": false,
+      "honest_inbound_pool": 50,
+      "honest_pool": 50,
+      "rejoin": false,
+      "reserved": 6
+     },
+     "title": "5-IP flood, 6 reserved honest peers"
+    }
+   ],
+   "title": "Reserved honest peers under Sybil flood"
+  },
+  {
+   "id": "S-06",
+   "runs": [
+    {
+     "events": [
+      {
+       "round": 0,
+       "text": "no attacker; honest pool of 50 offers ample endpoints"
+      },
+      {
+       "round": 1,
+       "text": "all 10 outbound slots filled with honest peers"
+      }
+     ],
+     "label": "A",
+     "params": {
+      "attacker_first": false,
+      "attacker_ips": 0,
+      "attacker_ports": 0,
+      "fixed": 0,
+      "handshake_reject": false,
+      "honest_inbound_pool": 50,
+      "honest_pool": 50,
+      "rejoin": false,
+      "reserved": 0
+     },
+     "title": "Healthy network, large honest pool"
+    }
+   ],
+   "title": "Healthy network, no attacker"
+  },
+  {
+   "id": "S-07",
+   "runs": [
+    {
+     "events": [
+      {
+       "round": 0,
+       "text": "no attacker; honest pool of 8 offers fewer endpoints than slots"
+      },
+      {
+       "round": 1,
+       "text": "8 of 10 outbound slots filled with honest peers; 2 slots stay open"
+      }
+     ],
+     "label": "A",
+     "params": {
+      "attacker_first": false,
+      "attacker_ips": 0,
+      "attacker_ports": 0,
+      "fixed": 0,
+      "handshake_reject": false,
+      "honest_inbound_pool": 8,
+      "honest_pool": 8,
+      "rejoin": false,
+      "reserved": 0
+     },
+     "title": "Healthy network, small honest pool"
+    }
+   ],
+   "title": "Healthy network, small honest pool"
+  },
+  {
+   "id": "S-08",
+   "runs": [
+    {
+     "events": [
+      {
+       "round": 0,
+       "text": "half of the 50 honest peers leave at once"
+      },
+      {
+       "round": 1,
+       "text": "25 honest peers remain; all 10 outbound slots refill with honest peers"
+      }
+     ],
+     "label": "A",
+     "params": {
+      "attacker_first": false,
+      "attacker_ips": 0,
+      "attacker_ports": 0,
+      "fixed": 0,
+      "handshake_reject": false,
+      "honest_inbound_pool": 25,
+      "honest_pool": 25,
+      "rejoin": false,
+      "reserved": 0
+     },
+     "title": "Churn, half the honest peers leave"
+    }
+   ],
+   "title": "Churn, half the honest peers leave"
+  },
+  {
+   "id": "S-09",
+   "runs": [
+    {
+     "events": [
+      {
+       "round": 0,
+       "text": "all honest peers leave at once: no honest endpoint in any cache"
+      },
+      {
+       "round": 1,
+       "text": "victim isolated; bootcache holds only stale entries"
+      },
+      {
+       "round": 2,
+       "text": "honest peers return; autoconnect refills 10 outbound slots in a second round"
+      }
+     ],
+     "label": "A",
+     "params": {
+      "attacker_first": false,
+      "attacker_ips": 0,
+      "attacker_ports": 0,
+      "fixed": 0,
+      "handshake_reject": false,
+      "honest_inbound_pool": 0,
+      "honest_pool": 0,
+      "rejoin": true,
+      "reserved": 0
+     },
+     "title": "Churn, all honest peers leave then return"
+    }
+   ],
+   "title": "Churn, total honest loss and return"
+  },
+  {
+   "id": "S-10",
+   "runs": [
+    {
+     "events": [
+      {
+       "round": 0,
+       "text": "network splits for 10 rounds; victim cut off from all honest peers"
+      },
+      {
+       "round": 1,
+       "text": "victim isolated for the whole split"
+      },
+      {
+       "round": 2,
+       "text": "split heals; autoconnect refills 10 outbound slots in a second round"
+      }
+     ],
+     "label": "A",
+     "params": {
+      "attacker_first": false,
+      "attacker_ips": 0,
+      "attacker_ports": 0,
+      "fixed": 0,
+      "handshake_reject": false,
+      "honest_inbound_pool": 0,
+      "honest_pool": 0,
+      "rejoin": true,
+      "reserved": 0
+     },
+     "title": "Partition for 10 rounds, then rejoin"
+    }
+   ],
+   "title": "Partition and rejoin, no anchor"
+  },
+  {
+   "id": "S-11",
+   "runs": [
+    {
+     "events": [
+      {
+       "round": 0,
+       "text": "network splits for 10 rounds; 1 fixed honest peer sits across the split"
+      },
+      {
+       "round": 1,
+       "text": "fixed peer holds one honest link through the split"
+      },
+      {
+       "round": 2,
+       "text": "split heals; autoconnect refills 10 outbound slots in a second round"
+      }
+     ],
+     "label": "A",
+     "params": {
+      "attacker_first": false,
+      "attacker_ips": 0,
+      "attacker_ports": 0,
+      "fixed": 1,
+      "handshake_reject": false,
+      "honest_inbound_pool": 0,
+      "honest_pool": 0,
+      "rejoin": true,
+      "reserved": 0
+     },
+     "title": "Partition for 10 rounds, 1 fixed peer across the split"
+    }
+   ],
+   "title": "Partition and rejoin with a fixed anchor"
+  },
+  {
+   "id": "S-12",
+   "runs": [
+    {
+     "events": [
+      {
+       "round": 0,
+       "text": "fresh node, empty bootcache; a full peer redirects 10 attacker endpoints"
+      },
+      {
+       "round": 1,
+       "text": "attacker endpoints are the only ones known; all 10 outbound slots taken"
+      }
+     ],
+     "label": "A",
+     "params": {
+      "attacker_first": true,
+      "attacker_ips": 1,
+      "attacker_ports": 10,
+      "fixed": 0,
+      "handshake_reject": false,
+      "honest_inbound_pool": 0,
+      "honest_pool": 0,
+      "rejoin": false,
+      "reserved": 0
+     },
+     "title": "Redirect poisoning, fresh node"
+    },
+    {
+     "events": [
+      {
+       "round": 0,
+       "text": "mature node; honest bootcache entries carry high valence"
+      },
+      {
+       "round": 1,
+       "text": "honest endpoints are tried first; attacker redirects stay untried"
+      }
+     ],
+     "label": "B",
+     "params": {
+      "attacker_first": false,
+      "attacker_ips": 1,
+      "attacker_ports": 10,
+      "fixed": 0,
+      "handshake_reject": false,
+      "honest_inbound_pool": 50,
+      "honest_pool": 50,
+      "rejoin": false,
+      "reserved": 0
+     },
+     "title": "Redirect poisoning, mature node"
+    }
+   ],
+   "title": "Redirect poisoning via a full peer"
+  },
+  {
+   "id": "S-13",
+   "runs": [
+    {
+     "events": [
+      {
+       "round": 0,
+       "text": "attacker offers 10 endpoints with bad session signatures, wrong network id, and skewed clocks"
+      },
+      {
+       "round": 1,
+       "text": "every attacker handshake is rejected; honest slots are preserved"
+      }
+     ],
+     "label": "A",
+     "params": {
+      "attacker_first": true,
+      "attacker_ips": 10,
+      "attacker_ports": 1,
+      "fixed": 0,
+      "handshake_reject": true,
+      "honest_inbound_pool": 50,
+      "honest_pool": 50,
+      "rejoin": false,
+      "reserved": 0
+     },
+     "title": "Handshake rejection of a Sybil flood"
+    }
+   ],
+   "title": "Handshake rejection under attack"
+  }
+ ],
+ "schema_version": 1
+}
