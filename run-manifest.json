@@ -1,0 +1,77 @@
+{
+ "pack": "Overlay and Eclipse-Resistance in postfiatd",
+ "pinned_commit": "0085a1ff885d6a446369cf73a4430f75af22be55",
+ "counts": {
+  "rules": {
+   "total": 45,
+   "by_status": {
+    "VERIFIED": 38,
+    "SPECIFIED": 4,
+    "MODELLED": 2,
+    "UNTESTABLE": 1
+   }
+  },
+  "scenarios": {
+   "total": 13,
+   "runs": 18,
+   "connected": 6,
+   "degraded": 6,
+   "eclipsed": 4,
+   "partitioned": 2
+  },
+  "findings": {
+   "total": 12,
+   "by_severity": {
+    "HIGH": 3,
+    "LOW": 4,
+    "MEDIUM": 5
+   },
+   "by_status": {
+    "VERIFIED": 12
+   }
+  },
+  "claims": {
+   "total": 24,
+   "by_status": {
+    "MODELLED": 4,
+    "SPECIFIED": 2,
+    "UNTESTABLE": 2,
+    "VERIFIED": 16
+   }
+  },
+  "risks": {
+   "total": 14,
+   "by_severity": {
+    "HIGH": 3,
+    "LOW": 3,
+    "MEDIUM": 8
+   }
+  },
+  "gaps": 8
+ },
+ "probes": {
+  "passed": 12,
+  "total": 12
+ },
+ "results_sha256": "ecfd2059503b4d2b737d2f354864ffe0071a753ded191654556a392f31790a5e",
+ "matrix_sha256": "ac702a53b26a4862d4a67ab67bf6ed392ba1c39b23855986b30457b4baa0b9d3",
+ "verification": {
+  "excerpts": 44,
+  "source_files": 12
+ },
+ "reproductions": [
+  {
+   "label": "fresh-clone-1",
+   "log": "outputs/fresh-clone-run.log",
+   "sha256": "eb014519fb934e17492e532b4ab144228ab2820cd2c55b18d8a3443b0f220fe2",
+   "status": "pass"
+  },
+  {
+   "label": "fresh-clone-2",
+   "log": "outputs/fresh-clone-2-run.log",
+   "sha256": "eb014519fb934e17492e532b4ab144228ab2820cd2c55b18d8a3443b0f220fe2",
+   "status": "pass"
+  }
+ ],
+ "status": "SOURCE-DERIVED"
+}
