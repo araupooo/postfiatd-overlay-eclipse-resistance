@@ -1,0 +1,20 @@
+# Source excerpt E09 — postfiatd 0085a1ff885d6a446369cf73a4430f75af22be55.
+# File: src/xrpld/peerfinder/detail/Logic.h, lines 274-285.
+# Line numbers verified with grep -n on a local checkout of the pinned commit.
+# Source file SHA-256: 5dc67999bcdc830610cf314dabe9cf0a31ff383859fef2b577eaaf89acbf4365
+# Source file git blob SHA: 56077303a3b5deec455018728d54c25551824f0b
+# Source file size: 41768 bytes
+
+# --- src/xrpld/peerfinder/detail/Logic.h lines 274-285 ---
+        if (is_public(remote_endpoint))
+        {
+            auto const count =
+                connectedAddresses_.count(remote_endpoint.address());
+            if (count + 1 > config_.ipLimit)
+            {
+                JLOG(m_journal.debug())
+                    << beast::leftw(18) << "Logic dropping inbound "
+                    << remote_endpoint << " because of ip limits.";
+                return {SlotImp::ptr(), Result::ipLimitExceeded};
+            }
+        }

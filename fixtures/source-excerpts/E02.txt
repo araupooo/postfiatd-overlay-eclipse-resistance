@@ -1,0 +1,9 @@
+# Source excerpt E02 — postfiatd 0085a1ff885d6a446369cf73a4430f75af22be55.
+# File: src/xrpld/peerfinder/detail/Tuning.h, lines 63-63.
+# Line numbers verified with grep -n on a local checkout of the pinned commit.
+# Source file SHA-256: d6aed33698cef5715061db033680e3565102e9915c937c6011e3429826735d86
+# Source file git blob SHA: 1ba23b1cfe5f668a70216151a1d5a25e09088bfc
+# Source file size: 4525 bytes
+
+# --- src/xrpld/peerfinder/detail/Tuning.h lines 63-63 ---
+    defaultMaxPeers = 21

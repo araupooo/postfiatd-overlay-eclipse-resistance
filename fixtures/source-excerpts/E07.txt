@@ -1,0 +1,10 @@
+# Source excerpt E07 — postfiatd 0085a1ff885d6a446369cf73a4430f75af22be55.
+# File: src/xrpld/peerfinder/detail/PeerfinderConfig.cpp, lines 98-99.
+# Line numbers verified with grep -n on a local checkout of the pinned commit.
+# Source file SHA-256: d40518a09e3bcaeb131a1688d020db67ef911fefaf131906d132fa5c1db6563f
+# Source file git blob SHA: 6164a8d7c1144ce06b8003a3eedebe573bf3a5e7
+# Source file size: 4203 bytes
+
+# --- src/xrpld/peerfinder/detail/PeerfinderConfig.cpp lines 98-99 ---
+        if (config.maxPeers < Tuning::minOutCount)
+            config.maxPeers = Tuning::minOutCount;
