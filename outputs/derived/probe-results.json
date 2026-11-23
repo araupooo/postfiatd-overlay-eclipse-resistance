@@ -1,0 +1,83 @@
+{
+ "checks": [
+  {
+   "check": "pinned checkout HEAD equals the pinned commit",
+   "detail": "HEAD=0085a1ff885d6a446369cf73a4430f75af22be55",
+   "id": "A-00",
+   "pass": true
+  },
+  {
+   "check": "45 rules: 38 VERIFIED anchors inside cited ranges, 4 SPECIFIED (external URLs), 2 MODELLED, 1 UNTESTABLE, none with a faked source",
+   "detail": "counts={'MODELLED': 2, 'SPECIFIED': 4, 'UNTESTABLE': 1, 'VERIFIED': 38}",
+   "id": "A-01",
+   "pass": true
+  },
+  {
+   "check": "per-scenario arithmetic reconciles; totals 13 scenarios / 18 runs / connected 6 / degraded 6 / eclipsed 4 / partitioned 2; matrix rows == runs; honest_links == honest_outbound + fixed + reserved; outcomes re-derived from the pinned constants",
+   "detail": "totals={'connected': 6, 'degraded': 6, 'eclipsed': 4, 'partitioned': 2, 'runs': 18, 'scenarios': 13} outcomes={'eclipsed': 4, 'degraded': 6, 'connected': 6, 'partitioned': 2} ",
+   "id": "B-01",
+   "pass": true
+  },
+  {
+   "check": "threshold rows match the model math for 7 attacker budgets; limits table matches the pinned constants (21/10/11 peers, ipLimit 2, no outbound cap, 20 attempts, 1000-entry bootcache, 30 s livecache, 6 hops, 12/64 endpoints, 10/30 redirects, 20 s clock, 15 s timeout)",
+   "detail": "all match",
+   "id": "C-01",
+   "pass": true
+  },
+  {
+   "check": "defaultMaxPeers 21 (Tuning.h:63), outPercent 15 / minOutCount 10 (:52/:59), maxConnectAttempts 20 (Counts.h:90), ipLimit 2 (PeerfinderConfig.cpp:53), maxHops 6 / 12 endpoints / 10 redirects / 30 s livecache (Tuning.h:110-128), 20 s clock (Handshake.cpp:268), 15 s timeout (ConnectAttempt.cpp:124), 600 s / 300 s eviction (Config.h:298-301), sendq 192 (PeerImp.cpp:2595)",
+   "detail": "all 14 tokens at recorded lines",
+   "id": "D-01",
+   "pass": true
+  },
+  {
+   "check": "can_activate bypasses caps for fixed/reserved slots; ipLimit is checked only in new_inbound_slot, never in new_outbound_slot; duplicate endpoint, duplicate key, and self-connect checks are present",
+   "detail": "slot-cap logic verified",
+   "id": "E-01",
+   "pass": true
+  },
+  {
+   "check": "matrix == results == scenarios (13); findings 12, claims 24 (16/2/4/2), risks 14, gaps 8; excerpts 44 across 12 files agree across manifest, files, hashes",
+   "detail": "claims=24 risks=14 gaps=8 excerpts=44 files=12",
+   "id": "F-01",
+   "pass": true
+  },
+  {
+   "check": "determinism: simulator re-run reproduces byte-identical results and matrix (full SHA-256)",
+   "detail": "results shipped=ecfd2059503b4d2b737d2f354864ffe0071a753ded191654556a392f31790a5e rerun=ecfd2059503b4d2b737d2f354864ffe0071a753ded191654556a392f31790a5e; matrix shipped=ac702a53b26a4862d4a67ab67bf6ed392ba1c39b23855986b30457b4baa0b9d3 rerun=ac702a53b26a4862d4a67ab67bf6ed392ba1c39b23855986b30457b4baa0b9d3",
+   "id": "G-01",
+   "pass": true
+  },
+  {
+   "check": "every excerpt digest matches source-hashes.json; every manifest blob SHA/size matches the checkout; run-manifest digests match shipped derived files; recorded reproduction log digests match the fresh-clone logs on disk",
+   "detail": "manifest digests match",
+   "id": "H-01",
+   "pass": true
+  },
+  {
+   "check": "absence findings re-grepped: diversity 0 hits; subnet 0 hits; secondsPerConnect never used outside Tuning.h; isConnectedToNetwork never called outside Counts.h",
+   "detail": "diversity=0 subnet=0 secondsPerConnect-uses=0 isConnectedToNetwork-uses=0",
+   "id": "I-01",
+   "pass": true
+  },
+  {
+   "check": "outPeers 10 is below maxPeers 21; sendq eviction needs 4 intervals; the four default bootstrap pools are present; the docs 2459 / 51235 port figures appear in the citations",
+   "detail": "divergence tokens verified",
+   "id": "J-01",
+   "pass": true
+  },
+  {
+   "check": "timing sanity: total probe elapsed_ms is non-negative (loose band, never exact)",
+   "detail": "value not recorded; never compared",
+   "id": "T-01",
+   "pass": true
+  }
+ ],
+ "matrix_sha256": "ac702a53b26a4862d4a67ab67bf6ed392ba1c39b23855986b30457b4baa0b9d3",
+ "pack": "Overlay and Eclipse-Resistance in postfiatd",
+ "passed": 12,
+ "pinned_commit": "0085a1ff885d6a446369cf73a4430f75af22be55",
+ "results_file": "outputs/derived/overlay-eclipse-results.json",
+ "results_sha256": "ecfd2059503b4d2b737d2f354864ffe0071a753ded191654556a392f31790a5e",
+ "total": 12
+}
