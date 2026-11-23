@@ -1,0 +1,14 @@
+# Source excerpt E43 — postfiatd 0085a1ff885d6a446369cf73a4430f75af22be55.
+# File: src/xrpld/core/Config.h, lines 296-301.
+# Line numbers verified with grep -n on a local checkout of the pinned commit.
+# Source file SHA-256: e7a18a4739593f507074e0e4de808b471e6f255bd2d0e71551558bb25b1e2498
+# Source file git blob SHA: 06cd0d24d8630d55affbbbf76ddcf766863659fc
+# Source file size: 13386 bytes
+
+# --- src/xrpld/core/Config.h lines 296-301 ---
+
+    // How long can a peer remain in the "unknown" state
+    std::chrono::seconds MAX_UNKNOWN_TIME{600};
+
+    // How long can a peer remain in the "diverged" state
+    std::chrono::seconds MAX_DIVERGED_TIME{300};

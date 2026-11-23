@@ -1,0 +1,10 @@
+# Source excerpt E38 — postfiatd 0085a1ff885d6a446369cf73a4430f75af22be55.
+# File: src/xrpld/overlay/detail/Handshake.cpp, lines 322-323.
+# Line numbers verified with grep -n on a local checkout of the pinned commit.
+# Source file SHA-256: d95134318065a6a503114aacf6e78dd59341fdc4b2a6cfaaf84c840eadde398d
+# Source file git blob SHA: e3617a1d9879b0c6663d91336ff49df57d2e13f2
+# Source file size: 13845 bytes
+
+# --- src/xrpld/overlay/detail/Handshake.cpp lines 322-323 ---
+    if (publicKey == app.nodeIdentity().first)
+        throw std::runtime_error("Self connection");

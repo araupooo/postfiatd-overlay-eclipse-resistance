@@ -1,0 +1,19 @@
+# Source excerpt E41 — postfiatd 0085a1ff885d6a446369cf73a4430f75af22be55.
+# File: src/xrpld/overlay/detail/PeerImp.cpp, lines 2590-2600.
+# Line numbers verified with grep -n on a local checkout of the pinned commit.
+# Source file SHA-256: 8de044c6d04ad1a88729a7e5b2ff994e92335ac357c9d80aaf905c2051e73c8b
+# Source file git blob SHA: d823bf23a17e62172320628a800fdda92fbb2bcb
+# Source file size: 116691 bytes
+
+# --- src/xrpld/overlay/detail/PeerImp.cpp lines 2590-2600 ---
+                                    << packet.objects_size();
+            fee_.update(Resource::feeMalformedRequest, "object count");
+            return;
+        }
+        // this is a query
+        if (send_queue_.size() >= Tuning::dropSendQueue)
+        {
+            JLOG(p_journal_.debug()) << "GetObject: Large send queue";
+            return;
+        }
+

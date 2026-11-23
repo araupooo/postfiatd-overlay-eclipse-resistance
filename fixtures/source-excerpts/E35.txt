@@ -1,0 +1,35 @@
+# Source excerpt E35 — postfiatd 0085a1ff885d6a446369cf73a4430f75af22be55.
+# File: src/xrpld/overlay/detail/Handshake.cpp, lines 252-278.
+# Line numbers verified with grep -n on a local checkout of the pinned commit.
+# Source file SHA-256: d95134318065a6a503114aacf6e78dd59341fdc4b2a6cfaaf84c840eadde398d
+# Source file git blob SHA: e3617a1d9879b0c6663d91336ff49df57d2e13f2
+# Source file size: 13845 bytes
+
+# --- src/xrpld/overlay/detail/Handshake.cpp lines 252-278 ---
+    if (auto const iter = headers.find("Network-Time"); iter != headers.end())
+    {
+        auto const netTime = [str = iter->value()]() -> TimeKeeper::time_point {
+            TimeKeeper::duration::rep val;
+
+            if (beast::lexicalCastChecked(val, str))
+                return TimeKeeper::time_point{TimeKeeper::duration{val}};
+
+            // It's not an error for the header field to not be present but if
+            // it is present and it contains junk data, that is an error.
+            throw std::runtime_error("Invalid peer clock timestamp");
+        }();
+
+        using namespace std::chrono;
+
+        auto const ourTime = app.timeKeeper().now();
+        auto const tolerance = 20s;
+
+        // We can't blindly "return a-b;" because TimeKeeper::time_point
+        // uses an unsigned integer for representing durations, which is
+        // a problem when trying to subtract time points.
+        auto calculateOffset = [](TimeKeeper::time_point a,
+                                  TimeKeeper::time_point b) {
+            if (a > b)
+                return duration_cast<std::chrono::seconds>(a - b);
+            return -duration_cast<std::chrono::seconds>(b - a);
+        };

@@ -1,0 +1,18 @@
+# Source excerpt E34 — postfiatd 0085a1ff885d6a446369cf73a4430f75af22be55.
+# File: src/xrpld/overlay/detail/Handshake.cpp, lines 241-250.
+# Line numbers verified with grep -n on a local checkout of the pinned commit.
+# Source file SHA-256: d95134318065a6a503114aacf6e78dd59341fdc4b2a6cfaaf84c840eadde398d
+# Source file git blob SHA: e3617a1d9879b0c6663d91336ff49df57d2e13f2
+# Source file size: 13845 bytes
+
+# --- src/xrpld/overlay/detail/Handshake.cpp lines 241-250 ---
+    if (auto const iter = headers.find("Network-ID"); iter != headers.end())
+    {
+        std::uint32_t nid;
+
+        if (!beast::lexicalCastChecked(nid, iter->value()))
+            throw std::runtime_error("Invalid peer network identifier");
+
+        if (networkID && nid != *networkID)
+            throw std::runtime_error("Peer is on a different network");
+    }

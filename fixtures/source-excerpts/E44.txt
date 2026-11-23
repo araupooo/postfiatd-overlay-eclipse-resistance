@@ -1,0 +1,21 @@
+# Source excerpt E44 — postfiatd 0085a1ff885d6a446369cf73a4430f75af22be55.
+# File: src/libxrpl/beast/net/IPAddressV4.cpp, lines 38-50.
+# Line numbers verified with grep -n on a local checkout of the pinned commit.
+# Source file SHA-256: d1b4d5dbaff41132f9225656187fc467a6bc7644358d1df312e173310dbfa7e0
+# Source file git blob SHA: 00b57c3283514741c421e35fac0c5c54c4f11391
+# Source file size: 3090 bytes
+
+# --- src/libxrpl/beast/net/IPAddressV4.cpp lines 38-50 ---
+is_public(AddressV4 const& addr)
+{
+    if (is_private(addr))
+        return false;
+    if (addr.is_multicast())
+        return false;
+
+    auto const ip = addr.to_uint();
+
+    // 0.0.0.0/8        "This network"
+    if ((ip & 0xff000000) == 0x00000000)
+        return false;
+    // 100.64.0.0/10     Shared Address Space (CGNAT) - RFC 6598
