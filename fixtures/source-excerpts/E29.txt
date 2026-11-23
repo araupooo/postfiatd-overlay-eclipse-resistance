@@ -1,0 +1,39 @@
+# Source excerpt E29 — postfiatd 0085a1ff885d6a446369cf73a4430f75af22be55.
+# File: src/xrpld/overlay/detail/OverlayImpl.cpp, lines 210-240.
+# Line numbers verified with grep -n on a local checkout of the pinned commit.
+# Source file SHA-256: 42837388b0b9699471e07d5c2e9cf0886e8b86ae76277e4f035de51a575d80c8
+# Source file git blob SHA: 291a95bc04f02da00fda5bdca1226c60068f26b5
+# Source file size: 49875 bytes
+
+# --- src/xrpld/overlay/detail/OverlayImpl.cpp lines 210-240 ---
+
+    {
+        auto const types = beast::rfc2616::split_commas(request["Connect-As"]);
+        if (std::find_if(types.begin(), types.end(), [](std::string const& s) {
+                return boost::iequals(s, "peer");
+            }) == types.end())
+        {
+            handoff.moved = false;
+            handoff.response =
+                makeRedirectResponse(slot, request, remote_endpoint.address());
+            handoff.keep_alive = beast::rfc2616::is_keep_alive(request);
+            return handoff;
+        }
+    }
+
+    auto const negotiatedVersion = negotiateProtocolVersion(request["Upgrade"]);
+    if (!negotiatedVersion)
+    {
+        m_peerFinder->on_closed(slot);
+        handoff.moved = false;
+        handoff.response = makeErrorResponse(
+            slot,
+            request,
+            remote_endpoint.address(),
+            "Unable to agree on a protocol version");
+        handoff.keep_alive = false;
+        return handoff;
+    }
+
+    auto const sharedValue = makeSharedValue(*stream_ptr, journal);
+    if (!sharedValue)

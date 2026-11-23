@@ -1,0 +1,16 @@
+# Source excerpt E28 — postfiatd 0085a1ff885d6a446369cf73a4430f75af22be55.
+# File: src/xrpld/overlay/detail/OverlayImpl.cpp, lines 185-192.
+# Line numbers verified with grep -n on a local checkout of the pinned commit.
+# Source file SHA-256: 42837388b0b9699471e07d5c2e9cf0886e8b86ae76277e4f035de51a575d80c8
+# Source file git blob SHA: 291a95bc04f02da00fda5bdca1226c60068f26b5
+# Source file size: 49875 bytes
+
+# --- src/xrpld/overlay/detail/OverlayImpl.cpp lines 185-192 ---
+    if (ec)
+    {
+        JLOG(journal.debug()) << remote_endpoint << " failed: " << ec.message();
+        return handoff;
+    }
+
+    auto consumer = m_resourceManager.newInboundEndpoint(
+        beast::IPAddressConversion::from_asio(remote_endpoint));

@@ -1,0 +1,29 @@
+# Source excerpt E30 — postfiatd 0085a1ff885d6a446369cf73a4430f75af22be55.
+# File: src/xrpld/overlay/detail/OverlayImpl.cpp, lines 352-372.
+# Line numbers verified with grep -n on a local checkout of the pinned commit.
+# Source file SHA-256: 42837388b0b9699471e07d5c2e9cf0886e8b86ae76277e4f035de51a575d80c8
+# Source file git blob SHA: 291a95bc04f02da00fda5bdca1226c60068f26b5
+# Source file size: 49875 bytes
+
+# --- src/xrpld/overlay/detail/OverlayImpl.cpp lines 352-372 ---
+    boost::beast::http::response<json_body> msg;
+    msg.version(request.version());
+    msg.result(boost::beast::http::status::service_unavailable);
+    msg.insert("Server", BuildInfo::getFullVersionString());
+    {
+        std::ostringstream ostr;
+        ostr << remote_address;
+        msg.insert("Remote-Address", ostr.str());
+    }
+    msg.insert("Content-Type", "application/json");
+    msg.insert(boost::beast::http::field::connection, "close");
+    msg.body() = Json::objectValue;
+    {
+        Json::Value& ips = (msg.body()["peer-ips"] = Json::arrayValue);
+        for (auto const& _ : m_peerFinder->redirect(slot))
+            ips.append(_.address.to_string());
+    }
+    msg.prepare_payload();
+    return std::make_shared<SimpleWriter>(msg);
+}
+

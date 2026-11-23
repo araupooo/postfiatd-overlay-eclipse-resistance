@@ -1,0 +1,44 @@
+# Source excerpt E32 — postfiatd 0085a1ff885d6a446369cf73a4430f75af22be55.
+# File: src/xrpld/overlay/detail/Handshake.cpp, lines 125-160.
+# Line numbers verified with grep -n on a local checkout of the pinned commit.
+# Source file SHA-256: d95134318065a6a503114aacf6e78dd59341fdc4b2a6cfaaf84c840eadde398d
+# Source file git blob SHA: e3617a1d9879b0c6663d91336ff49df57d2e13f2
+# Source file size: 13845 bytes
+
+# --- src/xrpld/overlay/detail/Handshake.cpp lines 125-160 ---
+          https://github.com/ripple/rippled/issues/2413.
+*/
+static std::optional<base_uint<512>>
+hashLastMessage(SSL const* ssl, size_t (*get)(const SSL*, void*, size_t))
+{
+    constexpr std::size_t sslMinimumFinishedLength = 12;
+
+    unsigned char buf[1024];
+    size_t len = get(ssl, buf, sizeof(buf));
+
+    if (len < sslMinimumFinishedLength)
+        return std::nullopt;
+
+    sha512_hasher h;
+
+    base_uint<512> cookie;
+    SHA512(buf, len, cookie.data());
+    return cookie;
+}
+
+std::optional<uint256>
+makeSharedValue(stream_type& ssl, beast::Journal journal)
+{
+    auto const cookie1 = hashLastMessage(ssl.native_handle(), SSL_get_finished);
+    if (!cookie1)
+    {
+        JLOG(journal.error()) << "Cookie generation: local setup not complete";
+        return std::nullopt;
+    }
+
+    auto const cookie2 =
+        hashLastMessage(ssl.native_handle(), SSL_get_peer_finished);
+    if (!cookie2)
+    {
+        JLOG(journal.error()) << "Cookie generation: peer setup not complete";
+        return std::nullopt;

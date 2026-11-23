@@ -1,0 +1,23 @@
+# Source excerpt E26 — postfiatd 0085a1ff885d6a446369cf73a4430f75af22be55.
+# File: src/xrpld/overlay/detail/Tuning.h, lines 44-58.
+# Line numbers verified with grep -n on a local checkout of the pinned commit.
+# Source file SHA-256: 1dd9a0dbbf723450f3907976384b323e72944e214caebbf9b49abb162749cb1c
+# Source file git blob SHA: 706c2459b6befffeef057290601336a407fcf8e2
+# Source file size: 2355 bytes
+
+# --- src/xrpld/overlay/detail/Tuning.h lines 44-58 ---
+    /** How many timer intervals a sendq has to stay large before we disconnect
+     */
+    sendqIntervals = 4,
+
+    /** How many messages on a send queue before we refuse queries */
+    dropSendQueue = 192,
+
+    /** How many messages we consider reasonable sustained on a send queue */
+    targetSendQueue = 128,
+
+    /** How often to log send queue size */
+    sendQueueLogFreq = 64,
+
+    /** How often we check for idle peers (seconds) */
+    checkIdlePeers = 4,

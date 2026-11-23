@@ -1,0 +1,34 @@
+# Source excerpt E25 — postfiatd 0085a1ff885d6a446369cf73a4430f75af22be55.
+# File: src/xrpld/peerfinder/detail/Bootcache.cpp, lines 225-250.
+# Line numbers verified with grep -n on a local checkout of the pinned commit.
+# Source file SHA-256: e3ecd498b4f8440e7c58ab269158d17b1cf629dac933a163cd3430ae17df3432
+# Source file git blob SHA: 9652d55802e2e42518c6d81f1db819d46aa1c16e
+# Source file size: 7876 bytes
+
+# --- src/xrpld/peerfinder/detail/Bootcache.cpp lines 225-250 ---
+Bootcache::prune()
+{
+    if (size() <= Tuning::bootcacheSize)
+        return;
+
+    // Calculate the amount to remove
+    auto count((size() * Tuning::bootcachePrunePercent) / 100);
+    decltype(count) pruned(0);
+
+    // Work backwards because bimap doesn't handle
+    // erasing using a reverse iterator very well.
+    //
+    for (auto iter(m_map.right.end());
+         count-- > 0 && iter != m_map.right.begin();
+         ++pruned)
+    {
+        --iter;
+        beast::IP::Endpoint const& endpoint(iter->get_left());
+        Entry const& entry(iter->get_right());
+        JLOG(m_journal.trace())
+            << beast::leftw(18) << "Bootcache pruned" << endpoint
+            << " at valence " << entry.valence();
+        iter = m_map.right.erase(iter);
+    }
+
+    JLOG(m_journal.debug()) << beast::leftw(18) << "Bootcache pruned " << pruned
