@@ -1,0 +1,47 @@
+# Source excerpt E15 — postfiatd 0085a1ff885d6a446369cf73a4430f75af22be55.
+# File: src/xrpld/peerfinder/detail/Logic.h, lines 537-575.
+# Line numbers verified with grep -n on a local checkout of the pinned commit.
+# Source file SHA-256: 5dc67999bcdc830610cf314dabe9cf0a31ff383859fef2b577eaaf89acbf4365
+# Source file git blob SHA: 56077303a3b5deec455018728d54c25551824f0b
+# Source file size: 41768 bytes
+
+# --- src/xrpld/peerfinder/detail/Logic.h lines 537-575 ---
+                return none;
+            }
+        }
+
+        // Only proceed if auto connect is enabled and we
+        // have less than the desired number of outbound slots
+        //
+        if (!config_.autoConnect || counts_.out_active() >= counts_.out_max())
+            return none;
+
+        // 2. Use Livecache if:
+        //    There are any entries in the cache OR
+        //    Any outbound attempts are in progress
+        //
+        {
+            livecache_.hops.shuffle();
+            handout(
+                &h, (&h) + 1, livecache_.hops.rbegin(), livecache_.hops.rend());
+            if (!h.list().empty())
+            {
+                JLOG(m_journal.debug())
+                    << beast::leftw(18) << "Logic connect " << h.list().size()
+                    << " live "
+                    << ((h.list().size() > 1) ? "endpoints" : "endpoint");
+                return h.list();
+            }
+            else if (counts_.attempts() > 0)
+            {
+                JLOG(m_journal.debug())
+                    << beast::leftw(18) << "Logic waiting on "
+                    << counts_.attempts() << " attempts";
+                return none;
+            }
+        }
+
+        /*  3. Bootcache refill
+            If the Bootcache is empty, try to get addresses from the current
+            set of Sources and add them into the Bootstrap cache.
+

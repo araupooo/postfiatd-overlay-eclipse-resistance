@@ -1,0 +1,10 @@
+# Source excerpt E21 — postfiatd 0085a1ff885d6a446369cf73a4430f75af22be55.
+# File: src/xrpld/peerfinder/detail/Counts.h, lines 77-78.
+# Line numbers verified with grep -n on a local checkout of the pinned commit.
+# Source file SHA-256: 3e4360251f8c0076eddfdca5fab45139ba5ff50796ac1aae678e0d8cc3495d2c
+# Source file git blob SHA: a35473ddb5d0d20a550f5a38fa8fbe7c06a9da05
+# Source file size: 9201 bytes
+
+# --- src/xrpld/peerfinder/detail/Counts.h lines 77-78 ---
+        if (s.fixed() || s.reserved())
+            return true;

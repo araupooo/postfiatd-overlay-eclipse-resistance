@@ -1,0 +1,24 @@
+# Source excerpt E11 — postfiatd 0085a1ff885d6a446369cf73a4430f75af22be55.
+# File: src/xrpld/peerfinder/detail/Logic.h, lines 378-393.
+# Line numbers verified with grep -n on a local checkout of the pinned commit.
+# Source file SHA-256: 5dc67999bcdc830610cf314dabe9cf0a31ff383859fef2b577eaaf89acbf4365
+# Source file git blob SHA: 56077303a3b5deec455018728d54c25551824f0b
+# Source file size: 41768 bytes
+
+# --- src/xrpld/peerfinder/detail/Logic.h lines 378-393 ---
+            if (iter != slots_.end())
+            {
+                XRPL_ASSERT(
+                    iter->second->local_endpoint() == slot->remote_endpoint(),
+                    "ripple::PeerFinder::Logic::onConnected : local and remote "
+                    "endpoints do match");
+                JLOG(m_journal.warn())
+                    << beast::leftw(18) << "Logic dropping "
+                    << slot->remote_endpoint() << " as self connect";
+                return false;
+            }
+        }
+
+        // Update counts
+        counts_.remove(*slot);
+        slot->state(Slot::connected);

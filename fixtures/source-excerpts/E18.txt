@@ -1,0 +1,76 @@
+# Source excerpt E18 — postfiatd 0085a1ff885d6a446369cf73a4430f75af22be55.
+# File: src/xrpld/peerfinder/detail/Logic.h, lines 719-786.
+# Line numbers verified with grep -n on a local checkout of the pinned commit.
+# Source file SHA-256: 5dc67999bcdc830610cf314dabe9cf0a31ff383859fef2b577eaaf89acbf4365
+# Source file git blob SHA: 56077303a3b5deec455018728d54c25551824f0b
+# Source file size: 41768 bytes
+
+# --- src/xrpld/peerfinder/detail/Logic.h lines 719-786 ---
+    preprocess(SlotImp::ptr const& slot, Endpoints& list)
+    {
+        bool neighbor(false);
+        for (auto iter = list.begin(); iter != list.end();)
+        {
+            Endpoint& ep(*iter);
+
+            // Enforce hop limit
+            if (ep.hops > Tuning::maxHops)
+            {
+                JLOG(m_journal.debug())
+                    << beast::leftw(18) << "Endpoints drop " << ep.address
+                    << " for excess hops " << ep.hops;
+                iter = list.erase(iter);
+                continue;
+            }
+
+            // See if we are directly connected
+            if (ep.hops == 0)
+            {
+                if (!neighbor)
+                {
+                    // Fill in our neighbors remote address
+                    neighbor = true;
+                    ep.address =
+                        slot->remote_endpoint().at_port(ep.address.port());
+                }
+                else
+                {
+                    JLOG(m_journal.debug())
+                        << beast::leftw(18) << "Endpoints drop " << ep.address
+                        << " for extra self";
+                    iter = list.erase(iter);
+                    continue;
+                }
+            }
+
+            // Discard invalid addresses
+            if (!is_valid_address(ep.address) && config_.verifyEndpoints)
+            {
+                JLOG(m_journal.debug()) << beast::leftw(18) << "Endpoints drop "
+                                        << ep.address << " as invalid";
+                iter = list.erase(iter);
+                continue;
+            }
+
+            // Filter duplicates
+            if (std::any_of(
+                    list.begin(),
+                    iter,
+                    [ep](Endpoints::value_type const& other) {
+                        return ep.address == other.address;
+                    }))
+            {
+                JLOG(m_journal.debug()) << beast::leftw(18) << "Endpoints drop "
+                                        << ep.address << " as duplicate";
+                iter = list.erase(iter);
+                continue;
+            }
+
+            // Increment hop count on the incoming message, so
+            // we store it at the hop count we will send it at.
+            //
+            ++ep.hops;
+
+            ++iter;
+        }
+    }

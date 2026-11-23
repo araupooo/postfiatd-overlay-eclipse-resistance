@@ -1,0 +1,28 @@
+# Source excerpt E14 — postfiatd 0085a1ff885d6a446369cf73a4430f75af22be55.
+# File: src/xrpld/peerfinder/detail/Logic.h, lines 516-535.
+# Line numbers verified with grep -n on a local checkout of the pinned commit.
+# Source file SHA-256: 5dc67999bcdc830610cf314dabe9cf0a31ff383859fef2b577eaaf89acbf4365
+# Source file git blob SHA: 56077303a3b5deec455018728d54c25551824f0b
+# Source file size: 41768 bytes
+
+# --- src/xrpld/peerfinder/detail/Logic.h lines 516-535 ---
+        // 1. Use Fixed if:
+        //    Fixed active count is below fixed count AND
+        //      ( There are eligible fixed addresses to try OR
+        //        Any outbound attempts are in progress)
+        //
+        if (counts_.fixed_active() < fixed_.size())
+        {
+            get_fixed(needed, h.list(), m_squelches);
+
+            if (!h.list().empty())
+            {
+                JLOG(m_journal.debug()) << beast::leftw(18) << "Logic connect "
+                                        << h.list().size() << " fixed";
+                return h.list();
+            }
+
+            if (counts_.attempts() > 0)
+            {
+                JLOG(m_journal.debug())
+                    << beast::leftw(18) << "Logic waiting on "

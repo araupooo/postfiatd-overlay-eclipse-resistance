@@ -1,0 +1,23 @@
+# Source excerpt E17 — postfiatd 0085a1ff885d6a446369cf73a4430f75af22be55.
+# File: src/xrpld/peerfinder/detail/Logic.h, lines 698-712.
+# Line numbers verified with grep -n on a local checkout of the pinned commit.
+# Source file SHA-256: 5dc67999bcdc830610cf314dabe9cf0a31ff383859fef2b577eaaf89acbf4365
+# Source file git blob SHA: 56077303a3b5deec455018728d54c25551824f0b
+# Source file size: 41768 bytes
+
+# --- src/xrpld/peerfinder/detail/Logic.h lines 698-712 ---
+    once_per_second()
+    {
+        std::lock_guard _(lock_);
+
+        // Expire the Livecache
+        livecache_.expire();
+
+        // Expire the recent cache in each slot
+        for (auto const& entry : slots_)
+            entry.second->expire();
+
+        // Expire the recent attempts table
+        beast::expire(m_squelches, Tuning::recentAttemptDuration);
+
+        bootcache_.periodicActivity();

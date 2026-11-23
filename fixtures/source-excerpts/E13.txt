@@ -1,0 +1,15 @@
+# Source excerpt E13 — postfiatd 0085a1ff885d6a446369cf73a4430f75af22be55.
+# File: src/xrpld/peerfinder/detail/Logic.h, lines 427-433.
+# Line numbers verified with grep -n on a local checkout of the pinned commit.
+# Source file SHA-256: 5dc67999bcdc830610cf314dabe9cf0a31ff383859fef2b577eaaf89acbf4365
+# Source file git blob SHA: 56077303a3b5deec455018728d54c25551824f0b
+# Source file size: 41768 bytes
+
+# --- src/xrpld/peerfinder/detail/Logic.h lines 427-433 ---
+        if (!counts_.can_activate(*slot))
+        {
+            if (!slot->inbound())
+                bootcache_.on_success(slot->remote_endpoint());
+            if (slot->inbound() && counts_.in_max() == 0)
+                return Result::inboundDisabled;
+            return Result::full;

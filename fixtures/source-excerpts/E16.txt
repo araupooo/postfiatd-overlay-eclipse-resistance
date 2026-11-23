@@ -1,0 +1,29 @@
+# Source excerpt E16 — postfiatd 0085a1ff885d6a446369cf73a4430f75af22be55.
+# File: src/xrpld/peerfinder/detail/Logic.h, lines 580-600.
+# Line numbers verified with grep -n on a local checkout of the pinned commit.
+# Source file SHA-256: 5dc67999bcdc830610cf314dabe9cf0a31ff383859fef2b577eaaf89acbf4365
+# Source file git blob SHA: 56077303a3b5deec455018728d54c25551824f0b
+# Source file size: 41768 bytes
+
+# --- src/xrpld/peerfinder/detail/Logic.h lines 580-600 ---
+                    ForOneOrMore (DomainName that hasn't been resolved recently)
+                        Contact DomainName and add entries to the
+           unusedBootstrapIPs return;
+        */
+
+        // 4. Use Bootcache if:
+        //    There are any entries we haven't tried lately
+        //
+        for (auto iter(bootcache_.begin());
+             !h.full() && iter != bootcache_.end();
+             ++iter)
+            h.try_insert(*iter);
+
+        if (!h.list().empty())
+        {
+            JLOG(m_journal.debug())
+                << beast::leftw(18) << "Logic connect " << h.list().size()
+                << " boot "
+                << ((h.list().size() > 1) ? "addresses" : "address");
+            return h.list();
+        }

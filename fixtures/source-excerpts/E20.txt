@@ -1,0 +1,44 @@
+# Source excerpt E20 — postfiatd 0085a1ff885d6a446369cf73a4430f75af22be55.
+# File: src/xrpld/peerfinder/detail/Logic.h, lines 845-880.
+# Line numbers verified with grep -n on a local checkout of the pinned commit.
+# Source file SHA-256: 5dc67999bcdc830610cf314dabe9cf0a31ff383859fef2b577eaaf89acbf4365
+# Source file git blob SHA: 56077303a3b5deec455018728d54c25551824f0b
+# Source file size: 41768 bytes
+
+# --- src/xrpld/peerfinder/detail/Logic.h lines 845-880 ---
+                {
+                    // Mark that a check for this slot is now in progress.
+                    slot->connectivityCheckInProgress = true;
+
+                    // Test the slot's listening port before
+                    // adding it to the livecache for the first time.
+                    //
+                    m_checker.async_connect(
+                        ep.address,
+                        std::bind(
+                            &Logic::checkComplete,
+                            this,
+                            slot->remote_endpoint(),
+                            ep.address,
+                            std::placeholders::_1));
+
+                    // Note that we simply discard the first Endpoint
+                    // that the neighbor sends when we perform the
+                    // listening test. They will just send us another
+                    // one in a few seconds.
+
+                    continue;
+                }
+
+                // If they failed the test then skip the address
+                if (!slot->canAccept)
+                    continue;
+            }
+
+            // We only add to the livecache if the neighbor passed the
+            // listening test, else we silently drop neighbor endpoint
+            // since their listening port is misconfigured.
+            //
+            livecache_.insert(ep);
+            bootcache_.insert(ep.address);
+        }

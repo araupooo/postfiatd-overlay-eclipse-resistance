@@ -1,0 +1,43 @@
+# Source excerpt E19 — postfiatd 0085a1ff885d6a446369cf73a4430f75af22be55.
+# File: src/xrpld/peerfinder/detail/Logic.h, lines 789-823.
+# Line numbers verified with grep -n on a local checkout of the pinned commit.
+# Source file SHA-256: 5dc67999bcdc830610cf314dabe9cf0a31ff383859fef2b577eaaf89acbf4365
+# Source file git blob SHA: 56077303a3b5deec455018728d54c25551824f0b
+# Source file size: 41768 bytes
+
+# --- src/xrpld/peerfinder/detail/Logic.h lines 789-823 ---
+    on_endpoints(SlotImp::ptr const& slot, Endpoints list)
+    {
+        // If we're sent too many endpoints, sample them at random:
+        if (list.size() > Tuning::numberOfEndpointsMax)
+        {
+            std::shuffle(list.begin(), list.end(), default_prng());
+            list.resize(Tuning::numberOfEndpointsMax);
+        }
+
+        JLOG(m_journal.trace())
+            << beast::leftw(18) << "Endpoints from " << slot->remote_endpoint()
+            << " contained " << list.size()
+            << ((list.size() > 1) ? " entries" : " entry");
+
+        std::lock_guard _(lock_);
+
+        // The object must exist in our table
+        XRPL_ASSERT(
+            slots_.find(slot->remote_endpoint()) != slots_.end(),
+            "ripple::PeerFinder::Logic::on_endpoints : valid slot input");
+
+        // Must be handshaked!
+        XRPL_ASSERT(
+            slot->state() == Slot::active,
+            "ripple::PeerFinder::Logic::on_endpoints : valid slot state");
+
+        clock_type::time_point const now(m_clock.now());
+
+        // Limit how often we accept new endpoints
+        if (slot->whenAcceptEndpoints > now)
+            return;
+
+        preprocess(slot, list);
+
+        for (auto const& ep : list)
