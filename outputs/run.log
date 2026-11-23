@@ -1,0 +1,10 @@
+# run.log — deterministic output digests (no timestamps, no absolute paths)
+# step extract_excerpts: pass
+# step overlay_eclipse_model_config: pass
+# step simulator: pass
+# step probe: pass
+ecfd2059503b4d2b737d2f354864ffe0071a753ded191654556a392f31790a5e  outputs/derived/overlay-eclipse-results.json
+e6a470d8cbd0996e3927f2665e4648ff9979e88e11cf074ee79b1b5fbd886522  outputs/derived/probe-results.json
+55143997ec1eb6ce11a660baab4a859b840cbdd72f047d39f0b1643d8bb2aaad  outputs/derived/run-summary.json
+ac702a53b26a4862d4a67ab67bf6ed392ba1c39b23855986b30457b4baa0b9d3  outputs/derived/scenario-matrix.json
+f3624a2ccee650ee9b3f61d5715eb1fc0e457758a70f1779dd9dd8907ca3d2c5  outputs/probe-run.log
