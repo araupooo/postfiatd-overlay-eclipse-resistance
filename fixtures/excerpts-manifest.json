@@ -1,0 +1,314 @@
+{
+ "pinned_commit": "0085a1ff885d6a446369cf73a4430f75af22be55",
+ "repo": "postfiatd",
+ "excerpts": [
+  {
+   "id": "E01",
+   "file": "src/xrpld/peerfinder/detail/Tuning.h",
+   "start_line": 52,
+   "end_line": 59,
+   "anchor": "outPercent = 15"
+  },
+  {
+   "id": "E02",
+   "file": "src/xrpld/peerfinder/detail/Tuning.h",
+   "start_line": 63,
+   "end_line": 63,
+   "anchor": "defaultMaxPeers = 21"
+  },
+  {
+   "id": "E03",
+   "file": "src/xrpld/peerfinder/detail/Tuning.h",
+   "start_line": 110,
+   "end_line": 132,
+   "anchor": "maxHops = 6"
+  },
+  {
+   "id": "E04",
+   "file": "src/xrpld/peerfinder/detail/PeerfinderConfig.cpp",
+   "start_line": 35,
+   "end_line": 42,
+   "anchor": "calcOutPeers"
+  },
+  {
+   "id": "E05",
+   "file": "src/xrpld/peerfinder/detail/PeerfinderConfig.cpp",
+   "start_line": 44,
+   "end_line": 62,
+   "anchor": "ipLimit = 2"
+  },
+  {
+   "id": "E06",
+   "file": "src/xrpld/peerfinder/detail/PeerfinderConfig.cpp",
+   "start_line": 93,
+   "end_line": 96,
+   "anchor": "cfg.PEERS_MAX"
+  },
+  {
+   "id": "E07",
+   "file": "src/xrpld/peerfinder/detail/PeerfinderConfig.cpp",
+   "start_line": 98,
+   "end_line": 99,
+   "anchor": "minOutCount"
+  },
+  {
+   "id": "E08",
+   "file": "src/xrpld/peerfinder/detail/PeerfinderConfig.cpp",
+   "start_line": 102,
+   "end_line": 112,
+   "anchor": "inPeers = config.maxPeers - config.outPeers"
+  },
+  {
+   "id": "E09",
+   "file": "src/xrpld/peerfinder/detail/Logic.h",
+   "start_line": 274,
+   "end_line": 285,
+   "anchor": "ipLimitExceeded"
+  },
+  {
+   "id": "E10",
+   "file": "src/xrpld/peerfinder/detail/Logic.h",
+   "start_line": 287,
+   "end_line": 294,
+   "anchor": "duplicate incoming"
+  },
+  {
+   "id": "E11",
+   "file": "src/xrpld/peerfinder/detail/Logic.h",
+   "start_line": 378,
+   "end_line": 393,
+   "anchor": "self connect"
+  },
+  {
+   "id": "E12",
+   "file": "src/xrpld/peerfinder/detail/Logic.h",
+   "start_line": 416,
+   "end_line": 419,
+   "anchor": "duplicatePeer"
+  },
+  {
+   "id": "E13",
+   "file": "src/xrpld/peerfinder/detail/Logic.h",
+   "start_line": 427,
+   "end_line": 433,
+   "anchor": "inboundDisabled"
+  },
+  {
+   "id": "E14",
+   "file": "src/xrpld/peerfinder/detail/Logic.h",
+   "start_line": 516,
+   "end_line": 535,
+   "anchor": "Use Fixed"
+  },
+  {
+   "id": "E15",
+   "file": "src/xrpld/peerfinder/detail/Logic.h",
+   "start_line": 537,
+   "end_line": 575,
+   "anchor": "Livecache"
+  },
+  {
+   "id": "E16",
+   "file": "src/xrpld/peerfinder/detail/Logic.h",
+   "start_line": 580,
+   "end_line": 600,
+   "anchor": "Bootcache"
+  },
+  {
+   "id": "E17",
+   "file": "src/xrpld/peerfinder/detail/Logic.h",
+   "start_line": 698,
+   "end_line": 712,
+   "anchor": "livecache_.expire"
+  },
+  {
+   "id": "E18",
+   "file": "src/xrpld/peerfinder/detail/Logic.h",
+   "start_line": 719,
+   "end_line": 786,
+   "anchor": "for excess hops"
+  },
+  {
+   "id": "E19",
+   "file": "src/xrpld/peerfinder/detail/Logic.h",
+   "start_line": 789,
+   "end_line": 823,
+   "anchor": "numberOfEndpointsMax"
+  },
+  {
+   "id": "E20",
+   "file": "src/xrpld/peerfinder/detail/Logic.h",
+   "start_line": 845,
+   "end_line": 880,
+   "anchor": "connectivityCheckInProgress"
+  },
+  {
+   "id": "E21",
+   "file": "src/xrpld/peerfinder/detail/Counts.h",
+   "start_line": 77,
+   "end_line": 78,
+   "anchor": "s.fixed() || s.reserved()"
+  },
+  {
+   "id": "E22",
+   "file": "src/xrpld/peerfinder/detail/Counts.h",
+   "start_line": 80,
+   "end_line": 83,
+   "anchor": "m_in_active < m_in_max"
+  },
+  {
+   "id": "E23",
+   "file": "src/xrpld/peerfinder/detail/Counts.h",
+   "start_line": 88,
+   "end_line": 93,
+   "anchor": "maxConnectAttempts"
+  },
+  {
+   "id": "E24",
+   "file": "src/xrpld/peerfinder/detail/Bootcache.cpp",
+   "start_line": 148,
+   "end_line": 190,
+   "anchor": "on_success"
+  },
+  {
+   "id": "E25",
+   "file": "src/xrpld/peerfinder/detail/Bootcache.cpp",
+   "start_line": 225,
+   "end_line": 250,
+   "anchor": "prune"
+  },
+  {
+   "id": "E26",
+   "file": "src/xrpld/overlay/detail/Tuning.h",
+   "start_line": 44,
+   "end_line": 58,
+   "anchor": "sendqIntervals = 4"
+  },
+  {
+   "id": "E27",
+   "file": "src/xrpld/overlay/detail/OverlayImpl.cpp",
+   "start_line": 111,
+   "end_line": 112,
+   "anchor": "deleteIdlePeers"
+  },
+  {
+   "id": "E28",
+   "file": "src/xrpld/overlay/detail/OverlayImpl.cpp",
+   "start_line": 185,
+   "end_line": 192,
+   "anchor": "newInboundEndpoint"
+  },
+  {
+   "id": "E29",
+   "file": "src/xrpld/overlay/detail/OverlayImpl.cpp",
+   "start_line": 210,
+   "end_line": 240,
+   "anchor": "Connect-As"
+  },
+  {
+   "id": "E30",
+   "file": "src/xrpld/overlay/detail/OverlayImpl.cpp",
+   "start_line": 352,
+   "end_line": 372,
+   "anchor": "service_unavailable"
+  },
+  {
+   "id": "E31",
+   "file": "src/xrpld/overlay/detail/OverlayImpl.cpp",
+   "start_line": 490,
+   "end_line": 515,
+   "anchor": "r.ripple.com"
+  },
+  {
+   "id": "E32",
+   "file": "src/xrpld/overlay/detail/Handshake.cpp",
+   "start_line": 125,
+   "end_line": 160,
+   "anchor": "hashLastMessage"
+  },
+  {
+   "id": "E33",
+   "file": "src/xrpld/overlay/detail/Handshake.cpp",
+   "start_line": 235,
+   "end_line": 239,
+   "anchor": "Invalid server domain"
+  },
+  {
+   "id": "E34",
+   "file": "src/xrpld/overlay/detail/Handshake.cpp",
+   "start_line": 241,
+   "end_line": 250,
+   "anchor": "different network"
+  },
+  {
+   "id": "E35",
+   "file": "src/xrpld/overlay/detail/Handshake.cpp",
+   "start_line": 252,
+   "end_line": 278,
+   "anchor": "tolerance"
+  },
+  {
+   "id": "E36",
+   "file": "src/xrpld/overlay/detail/Handshake.cpp",
+   "start_line": 280,
+   "end_line": 297,
+   "anchor": "secp256k1"
+  },
+  {
+   "id": "E37",
+   "file": "src/xrpld/overlay/detail/Handshake.cpp",
+   "start_line": 311,
+   "end_line": 319,
+   "anchor": "verifyDigest"
+  },
+  {
+   "id": "E38",
+   "file": "src/xrpld/overlay/detail/Handshake.cpp",
+   "start_line": 322,
+   "end_line": 323,
+   "anchor": "Self connection"
+  },
+  {
+   "id": "E39",
+   "file": "src/xrpld/overlay/detail/Handshake.cpp",
+   "start_line": 325,
+   "end_line": 360,
+   "anchor": "Local-IP"
+  },
+  {
+   "id": "E40",
+   "file": "src/xrpld/overlay/detail/PeerImp.cpp",
+   "start_line": 728,
+   "end_line": 762,
+   "anchor": "Large send queue"
+  },
+  {
+   "id": "E41",
+   "file": "src/xrpld/overlay/detail/PeerImp.cpp",
+   "start_line": 2590,
+   "end_line": 2600,
+   "anchor": "dropSendQueue"
+  },
+  {
+   "id": "E42",
+   "file": "src/xrpld/overlay/detail/ConnectAttempt.cpp",
+   "start_line": 120,
+   "end_line": 130,
+   "anchor": "seconds(15)"
+  },
+  {
+   "id": "E43",
+   "file": "src/xrpld/core/Config.h",
+   "start_line": 296,
+   "end_line": 301,
+   "anchor": "MAX_UNKNOWN_TIME"
+  },
+  {
+   "id": "E44",
+   "file": "src/libxrpl/beast/net/IPAddressV4.cpp",
+   "start_line": 38,
+   "end_line": 50,
+   "anchor": "is_public"
+  }
+ ]
+}
